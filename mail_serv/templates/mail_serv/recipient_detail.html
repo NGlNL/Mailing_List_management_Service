@@ -1,0 +1,14 @@
+{% extends "mail_serv/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-left">{{ recipient.initials|default_if_none:"Не указано" }}</h1>
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <p>email: {{ recipient.email|default_if_none:"Не указано" }}</p>
+      <p>Комментарий: {{ recipient.comment|default_if_none:"Не указано" }}</p>
+      <a href="{% url 'mail_serv:profile' %}" class="btn btn-primary mt-3">Назад на главную</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

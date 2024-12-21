@@ -1,0 +1,13 @@
+{% extends 'mail_serv/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Статистика</h1>
+            <p><strong>Успешные попытки:</strong> {{ successful_attempts_count }}</p>
+            <p><strong>Не успешные попытки:</strong> {{ unsuccessful_attempts_count }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

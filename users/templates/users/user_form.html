@@ -1,0 +1,17 @@
+{% extends "mail_serv/base.html" %}
+{% block content %}
+<div class="container">
+    <form method="post">
+        <div class="col-6">
+            <div class="card">
+                <h2 class="card-header">Регистрация</h2>
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

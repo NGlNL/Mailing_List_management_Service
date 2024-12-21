@@ -1,0 +1,20 @@
+{% extends "mail_serv/base.html" %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+        <div class="col-6">
+            <div class="card">
+                <h2 class="card-header">Вход</h2>
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Войти</button>
+                <a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
+                <a href="{% url 'users:register' %}">Регистрация</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
