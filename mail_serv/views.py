@@ -14,6 +14,7 @@ from django.views.decorators.cache import cache_page
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, View)
 
+from config.settings import EMAIL_HOST_USER
 from mail_serv.forms import MailingForm, MessageManagementForm, RecipientForm
 from mail_serv.models import (EmailSendingAttempt, Mailing, MessageManagement,
                               Recipient)
@@ -242,8 +243,8 @@ def send_message(mailing_id, owner):
                     send_mail(
                         mailing.message.subject,
                         mailing.message.body,
-                        "ng_nl01@mail.ru",
-                        [recipient.email],
+                        from_email=EMAIL_HOST_USER,
+                        recipient_list=[recipient.email],
                         fail_silently=False,
                     )
                     EmailSendingAttempt.objects.create(

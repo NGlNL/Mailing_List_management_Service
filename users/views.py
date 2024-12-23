@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, View
 
+from config.settings import EMAIL_HOST_USER
 from users.forms import CustomSetPasswordForm, UserRegisterForm
 from users.models import User
 
@@ -33,7 +34,7 @@ class UserCreateView(CreateView):
         send_mail(
             subject="Подтверждение регистрации",
             message=f"Подтвердите регистрацию на {url}",
-            from_email="ng_nl01@mail.ru",
+            from_email=EMAIL_HOST_USER,
             recipient_list=[user.email],
         )
 
