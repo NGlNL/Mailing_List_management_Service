@@ -38,7 +38,8 @@ class UserCreateView(CreateView):
             recipient_list=[user.email],
         )
 
-        group = Group.objects.get(name="Пользователь")
+        group_name = "Пользователь"
+        group, created = Group.objects.get_or_create(name=group_name)
         group.user_set.add(user)
 
         return super().form_valid(form)
