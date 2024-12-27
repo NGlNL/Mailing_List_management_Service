@@ -4,32 +4,43 @@ import time
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
-                         HttpResponseRedirect)
+from django.http import (
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseRedirect,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView, View)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+    View,
+)
 
 from config.settings import EMAIL_HOST_USER
 from mail_serv.forms import MailingForm, MessageManagementForm, RecipientForm
-from mail_serv.models import (EmailSendingAttempt, Mailing, MessageManagement,
-                              Recipient)
-from mail_serv.services import (get_mailings_from_cache,
-                                get_messages_from_cache,
-                                get_recipients_from_cache)
+from mail_serv.models import EmailSendingAttempt, Mailing, MessageManagement, Recipient
+from mail_serv.services import (
+    get_mailings_from_cache,
+    get_messages_from_cache,
+    get_recipients_from_cache,
+)
 
 
 def home(request):
-    '''Представление для отображения домашней страницы.'''
+    """Представление для отображения домашней страницы."""
     return render(request, "mail_serv/home.html")
 
 
 class RecipientView(ListView):
-    '''Представление для отображения списка получателей.'''
+    """Представление для отображения списка получателей."""
+
     model = Recipient
     template_name = "mail_serv/profile.html"
     context_object_name = "recipients"
@@ -61,7 +72,7 @@ class RecipientView(ListView):
         return context
 
     def get_queryset(self):
-        ''''Получение списка получателей из кэша.'''
+        """'Получение списка получателей из кэша."""
         recipients = get_recipients_from_cache()
         messages = get_messages_from_cache()
         mailings = get_mailings_from_cache()
@@ -69,37 +80,40 @@ class RecipientView(ListView):
 
 
 class RecipientCreateView(CreateView, LoginRequiredMixin):
-    '''Представление для создания получателя.'''
+    """Представление для создания получателя."""
+
     model = Recipient
     form_class = RecipientForm
 
     def get_success_url(self):
-        '''Получение адреса для перенаправления после создания.'''
+        """Получение адреса для перенаправления после создания."""
         return reverse_lazy("mail_serv:profile")
 
     def form_valid(self, form):
-        ''''Создание получателя.'''
+        """'Создание получателя."""
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
 class RecipientUpdateView(UpdateView, LoginRequiredMixin):
-    '''Представление для обновления получателя.'''
+    """Представление для обновления получателя."""
+
     model = Recipient
     form_class = RecipientForm
     success_url = reverse_lazy("mail_serv:profile")
 
 
 class RecipientDeleteView(DeleteView, LoginRequiredMixin):
-    '''Представление для удаления получателя.'''
+    """Представление для удаления получателя."""
+
     model = Recipient
 
     def get_success_url(self):
-        '''Получение адреса для перенаправления после удаления.'''
+        """Получение адреса для перенаправления после удаления."""
         return reverse_lazy("mail_serv:profile")
 
     def delete(self, request, *args, **kwargs):
-        ''''Удаление получателя.'''
+        """'Удаление получателя."""
         self.object = self.get_object()
         if request.method == "POST":
             self.object.delete()
@@ -109,14 +123,16 @@ class RecipientDeleteView(DeleteView, LoginRequiredMixin):
 
 
 class RecipientDetailView(DetailView, LoginRequiredMixin):
-    ''''Представление для получателя.'''
+    """'Представление для получателя."""
+
     model = Recipient
     template_name = "mail_serv/recipient_detail.html"
     context_object_name = "recipient"
 
 
 class MessageManagementCreateView(CreateView, LoginRequiredMixin):
-    ''''Представление для создания сообщения.'''
+    """'Представление для создания сообщения."""
+
     model = MessageManagement
     form_class = MessageManagementForm
     success_url = reverse_lazy("mail_serv:profile")
@@ -127,7 +143,8 @@ class MessageManagementCreateView(CreateView, LoginRequiredMixin):
 
 
 class MessageManagementUpdateView(UpdateView, LoginRequiredMixin):
-    ''''Представление для обновления сообщения.'''
+    """'Представление для обновления сообщения."""
+
     model = MessageManagement
     form_class = MessageManagementForm
 
@@ -136,7 +153,8 @@ class MessageManagementUpdateView(UpdateView, LoginRequiredMixin):
 
 
 class MessageManagementDeleteView(DeleteView, LoginRequiredMixin):
-    '''Представление для удаления сообщения.'''
+    """Представление для удаления сообщения."""
+
     model = MessageManagement
     success_url = reverse_lazy("mail_serv:profile")
 
@@ -150,27 +168,29 @@ class MessageManagementDeleteView(DeleteView, LoginRequiredMixin):
 
 
 class MessageManagementDetailView(DetailView, LoginRequiredMixin):
-    ''''Представление для сообщения.'''
+    """'Представление для сообщения."""
+
     model = MessageManagement
     template_name = "mail_serv/message_detail.html"
     context_object_name = "messagemanagement"
 
 
 class MailingCreateView(LoginRequiredMixin, CreateView):
-    '''Представление для создания рассылки.'''
+    """Представление для создания рассылки."""
+
     model = Mailing
     form_class = MailingForm
     template_name = "mail_serv/mailing_form.html"
     success_url = reverse_lazy("mail_serv:profile")
 
     def get_form_kwargs(self):
-        '''Получает дополнительные аргументы для формы и добавляет текущего пользователя в них.'''
+        """Получает дополнительные аргументы для формы и добавляет текущего пользователя в них."""
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
 
     def form_valid(self, form):
-        ''''Создание рассылки.'''
+        """'Создание рассылки."""
         form.instance.owner = self.request.user
         mailing = form.save(commit=False)
         mailing.status = "Создана"
@@ -179,20 +199,23 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 
 
 class MailingDetailView(DetailView, LoginRequiredMixin):
-    '''Представление для рассылки.'''
+    """Представление для рассылки."""
+
     model = Mailing
     template_name = "mail_serv/mailing_detail.html"
     context_object_name = "mailing"
 
 
 class MailingDeleteView(DeleteView, LoginRequiredMixin):
-    '''Представление для удаления рассылки.'''
+    """Представление для удаления рассылки."""
+
     model = Mailing
     success_url = reverse_lazy("mail_serv:profile")
 
 
 class MailingUpdateView(UpdateView, LoginRequiredMixin):
-    '''Представление для обновления рассылки.'''
+    """Представление для обновления рассылки."""
+
     model = Mailing
     form_class = MailingForm
 
@@ -206,7 +229,8 @@ class MailingUpdateView(UpdateView, LoginRequiredMixin):
 
 
 class MailingSendView(View, LoginRequiredMixin):
-    '''Представление для отправки рассылки.'''
+    """Представление для отправки рассылки."""
+
     def post(self, request, pk=None):
         if pk is None:
             pk = request.POST.get("pk")
@@ -220,7 +244,7 @@ class MailingSendView(View, LoginRequiredMixin):
 
 
 def send_message(mailing_id, owner):
-    ''''Функция для отправки рассылки.'''
+    """'Функция для отправки рассылки."""
     mailing = Mailing.objects.get(id=mailing_id)
     mailing.status = "Запущена"
     mailing.save()
@@ -279,7 +303,8 @@ def send_message(mailing_id, owner):
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
 class EmailSendingAttemptListView(ListView, LoginRequiredMixin):
-    '''Представление для списка попыток отправки.'''
+    """Представление для списка попыток отправки."""
+
     model = EmailSendingAttempt
     context_object_name = "emailsendingattempts"
 
@@ -319,7 +344,8 @@ class EmailSendingAttemptListView(ListView, LoginRequiredMixin):
 
 
 class DisableMailingView(LoginRequiredMixin, View):
-    '''Представление для отмены рассылки.'''
+    """Представление для отмены рассылки."""
+
     def post(self, request, **kwargs):
         mailing_id = kwargs.get("mailing_id")
         if not mailing_id:

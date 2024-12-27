@@ -5,7 +5,7 @@ from mail_serv.models import Mailing, MessageManagement, Recipient
 
 
 def get_recipients_from_cache():
-    '''Получает список всех получателей из кэша, если кэширование включено.'''
+    """Получает список всех получателей из кэша, если кэширование включено."""
     if not CACHE_ENABLED:
         return Recipient.objects.all()
     key = "recipients"
@@ -18,7 +18,7 @@ def get_recipients_from_cache():
 
 
 def get_messages_from_cache():
-    '''Получает список всех сообщений из кэша, если кэширование включено.'''
+    """Получает список всех сообщений из кэша, если кэширование включено."""
     if not CACHE_ENABLED:
         return MessageManagement.objects.all()
     key = "messages"
@@ -31,7 +31,7 @@ def get_messages_from_cache():
 
 
 def get_mailings_from_cache():
-    '''Получает список всех рассылок из кэша, если кэширование включено.'''
+    """Получает список всех рассылок из кэша, если кэширование включено."""
     if not CACHE_ENABLED:
         return Mailing.objects.all()
     key = "mailings"

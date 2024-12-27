@@ -3,7 +3,8 @@ from django.db import models
 
 
 class Recipient(models.Model):
-    '''Модель получателя'''
+    """Модель получателя"""
+
     email = models.CharField(max_length=100, unique=False)
     initials = models.CharField(max_length=100, verbose_name="Ф.И.О.")
     comment = models.TextField(max_length=150, verbose_name="Комментарий")
@@ -23,7 +24,8 @@ class Recipient(models.Model):
 
 
 class MessageManagement(models.Model):
-    '''Модель сообщений'''
+    """Модель сообщений"""
+
     subject = models.CharField(max_length=100, verbose_name="Тема письма")
     body = models.TextField(max_length=1000, verbose_name="Тело письма")
 
@@ -42,7 +44,8 @@ class MessageManagement(models.Model):
 
 
 class Mailing(models.Model):
-    '''Модель рассылок'''
+    """Модель рассылок"""
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     started_at = models.DateTimeField(
         null=True, blank=True, verbose_name="Дата запуска"
@@ -80,7 +83,8 @@ class Mailing(models.Model):
 
 
 class EmailSendingAttempt(models.Model):
-    '''Модель попыток отправки'''
+    """Модель попыток отправки"""
+
     datetime = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=10, choices=[("Успешно", "Успешно"), ("Не успешно", "Не успешно")]

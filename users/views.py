@@ -2,8 +2,7 @@ import secrets
 
 from django.contrib.auth import login
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -18,7 +17,8 @@ from users.models import User
 
 
 class UserCreateView(CreateView):
-    '''Представление для создания нового пользователя.'''
+    """Представление для создания нового пользователя."""
+
     model = User
     form_class = UserRegisterForm
     success_url = reverse_lazy("users:login")
@@ -38,15 +38,14 @@ class UserCreateView(CreateView):
             recipient_list=[user.email],
         )
 
-        group_name = "Пользователь"
-        group, created = Group.objects.get_or_create(name=group_name)
+        group = Group.objects.get(name="Пользователь")
         group.user_set.add(user)
 
         return super().form_valid(form)
 
 
 def email_verification(request, token):
-    '''Функция для подтверждения email пользователя.'''
+    """Функция для подтверждения email пользователя."""
     user = get_object_or_404(User, token=token)
     user.is_active = True
     user.save()
@@ -54,12 +53,13 @@ def email_verification(request, token):
 
 
 class PasswordResetRequestView(View):
-    '''Представление для запроса сброса пароля пользователя.'''
+    """Представление для запроса сброса пароля пользователя."""
+
     template_name = "users/password_reset_form.html"
     success_url = "users:login"
 
     def get(self, request):
-        '''Функция для получения формы сброса пароля.'''
+        """Функция для получения формы сброса пароля."""
         token = request.GET.get("token")
         if token:
             user = get_object_or_404(User, token=token)
@@ -73,7 +73,7 @@ class PasswordResetRequestView(View):
             return render(request, self.template_name, {"form": form})
 
     def post(self, request):
-        '''Функция для отправки запроса на сброс пароля.'''
+        """Функция для отправки запроса на сброс пароля."""
         form = PasswordResetForm(request.POST)
         if form.is_valid():
             user = get_object_or_404(User, email=form.cleaned_data["email"])
@@ -94,7 +94,8 @@ class PasswordResetRequestView(View):
 
 
 class PasswordResetConfirmView(View):
-    '''Представление для подтверждения сброса пароля пользователя.'''
+    """Представление для подтверждения сброса пароля пользователя."""
+
     template_name = "users/password_reset_confirm.html"
     form_class = CustomSetPasswordForm
 
@@ -107,7 +108,7 @@ class PasswordResetConfirmView(View):
             return render(request, self.template_name, {"form": form})
 
     def post(self, request, token):
-        '''Функция для подтверждения сброса пароля пользователя.'''
+        """Функция для подтверждения сброса пароля пользователя."""
         user = get_object_or_404(User, token=token)
         if request.method == "POST":
             form = CustomSetPasswordForm(user, request.POST)
@@ -124,22 +125,24 @@ class PasswordResetConfirmView(View):
 
 
 class UserListView(ListView):
-    '''Представление для отображения списка пользователей.'''
+    """Представление для отображения списка пользователей."""
+
     model = User
     template_name = "users/user_list.html"
     context_object_name = "users"
 
     def get_queryset(self):
-        '''Функция для получения списка пользователей с сортировкой.'''
+        """Функция для получения списка пользователей с сортировкой."""
         return User.objects.all().order_by("id")
 
 
 class BlockUserView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    '''Представление для блокировки пользователя.'''
+    """Представление для блокировки пользователя."""
+
     permission_required = "users.can_block_service_users"
 
     def post(self, request, **kwargs):
-        '''Функция для блокировки пользователя.'''
+        """Функция для блокировки пользователя."""
         user_id = kwargs.get("user_id")
         if not user_id:
             return HttpResponseBadRequest("Не передан ID пользователя")
@@ -156,11 +159,12 @@ class BlockUserView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class UnblockUserView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    '''Представление для разблокировки пользователя.'''
+    """Представление для разблокировки пользователя."""
+
     permission_required = "users.can_block_service_users"
 
     def post(self, request, **kwargs):
-        '''Функция для разблокировки пользователя.'''
+        """Функция для разблокировки пользователя."""
         user_id = kwargs.get("user_id")
         if not user_id:
             return HttpResponseBadRequest("Не передан ID пользователя")

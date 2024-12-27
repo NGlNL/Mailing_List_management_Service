@@ -6,14 +6,16 @@ from users.models import User
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
-    '''Форма регистрации пользователя'''
+    """Форма регистрации пользователя"""
+
     class Meta:
         model = User
         fields = ("email", "password1", "password2")
 
 
 class CustomSetPasswordForm(StyleFormMixin, SetPasswordForm):
-    '''Форма смены пароля'''
+    """Форма смены пароля"""
+
     new_password1 = forms.CharField(
         label="Новый пароль",
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),

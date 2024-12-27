@@ -18,7 +18,8 @@ FORBIDDEN_WORDS = [
 
 
 class StyleFormMixin:
-    '''Миксин для стилизации полей форм.'''
+    """Миксин для стилизации полей форм."""
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
@@ -38,7 +39,8 @@ class StyleFormMixin:
 
 
 class RecipientForm(StyleFormMixin, ModelForm):
-    '''Форма для модели Recipient с миксином стилизации полей.'''
+    """Форма для модели Recipient с миксином стилизации полей."""
+
     class Meta:
         model = Recipient
         fields = ["email", "initials", "comment"]
@@ -52,7 +54,8 @@ class RecipientForm(StyleFormMixin, ModelForm):
 
 
 class MessageManagementForm(StyleFormMixin, ModelForm):
-    '''Форма для модели MessageManagement с миксином стилизации полей.'''
+    """Форма для модели MessageManagement с миксином стилизации полей."""
+
     class Meta:
         model = MessageManagement
         fields = ["subject", "body"]
@@ -66,7 +69,8 @@ class MessageManagementForm(StyleFormMixin, ModelForm):
 
 
 class MailingForm(StyleFormMixin, ModelForm):
-    '''Форма для модели Mailing с миксином стилизации полей.'''
+    """Форма для модели Mailing с миксином стилизации полей."""
+
     started_at = forms.DateTimeField(
         widget=forms.DateTimeInput(
             attrs={"type": "datetime-local", "class": "form-control"}

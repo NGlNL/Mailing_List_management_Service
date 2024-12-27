@@ -23,4 +23,5 @@ Windows:
 ```pip install redis```
 В файле ".env.sample" необходимо ввести свои данные для работы проекта.
 ## Запуск
+Перед запуском сервера пропишите команду для загрузки групп в терминале ```python manage.py loaddata groups.json```
 Для запуска, пропишите в терминале команду: ```python manage.py runserver```

@@ -1,15 +1,25 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from mail_serv.views import (DisableMailingView, EmailSendingAttemptListView,
-                             MailingCreateView, MailingDeleteView,
-                             MailingDetailView, MailingSendView,
-                             MailingUpdateView, MessageManagementCreateView,
-                             MessageManagementDeleteView,
-                             MessageManagementDetailView,
-                             MessageManagementUpdateView, RecipientCreateView,
-                             RecipientDeleteView, RecipientDetailView,
-                             RecipientUpdateView, RecipientView, home)
+from mail_serv.views import (
+    DisableMailingView,
+    EmailSendingAttemptListView,
+    MailingCreateView,
+    MailingDeleteView,
+    MailingDetailView,
+    MailingSendView,
+    MailingUpdateView,
+    MessageManagementCreateView,
+    MessageManagementDeleteView,
+    MessageManagementDetailView,
+    MessageManagementUpdateView,
+    RecipientCreateView,
+    RecipientDeleteView,
+    RecipientDetailView,
+    RecipientUpdateView,
+    RecipientView,
+    home,
+)
 
 app_name = "mail_serv"
 
