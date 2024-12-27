@@ -1,0 +1,18 @@
+{% extends "mail_serv/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <p>Дата запуска: {{ mailing.started_at }}</p>
+      <p>Дата завершения: {{ mailing.ended_at }}</p>
+      <p>Сообщение: {{ mailing.message }}</p>
+      <p>
+          Получатели: {{ mailing.recipients.count }}
+      </p>
+      <p>Статус: {{ mailing.status }}</p>
+      <a href="{% url 'mail_serv:profile' %}" class="btn btn-primary mt-3">Назад на главную</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

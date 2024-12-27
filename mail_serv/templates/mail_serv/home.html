@@ -1,0 +1,67 @@
+{% extends "mail_serv/base.html" %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Mailstore</h1>
+    <p class="lead highlight">
+        <h5>Mailstore - это отличный вариант сохранение старых клиентов и добавление новых участников в вашу команду!</h5>
+</div>
+<div class="container">
+    <div class="row text-center">
+        <div class="col-4 h-100">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h1 class="my-0 font-weight-normal">Шаг 1</h1>
+                </div>
+                <div class="card-body bg-danger.bg-gradient mt-3">
+                    <h4 class="card-title pricing-card-title">Загрузите базу email-адресов</h4>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'mail_serv:rec_create' %}" type="button" class="btn btn-lg btn-block btn-outline-primary mt-1">Перейти</a>
+                    {% else %}
+                      <div class="alert alert-danger" role="alert">
+                        Пожалуйста, войдите в систему, чтобы продолжить.
+                      </div>
+                      <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4 h-100">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h1 class="my-0 font-weight-normal">Шаг 2</h1>
+                </div>
+                <div class="card-body mt-4">
+                    <h4 class="card-title pricing-card-title">Создайте письмо</h4>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'mail_serv:management_create' %}" type="button" class="btn btn-lg btn-block btn-outline-primary mt-4">Создать</a>
+                    {% else %}
+                      <div class="alert alert-danger" role="alert">
+                        Пожалуйста, войдите в систему, чтобы продолжить.
+                      </div>
+                      <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4 h-100">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h1 class="my-0 font-weight-normal">Шаг 3</h1>
+                </div>
+                <div class="card-body mt-0">
+                    <h4 class="card-title pricing-card-title">Создайте и запустите рассылку</h4>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'mail_serv:mail_create' %}" type="button" class="btn btn-lg btn-block btn-outline-primary mt-4">Запустить</a>
+                    {% else %}
+                      <div class="alert alert-danger" role="alert">
+                        Пожалуйста, войдите в систему, чтобы продолжить.
+                      </div>
+                      <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

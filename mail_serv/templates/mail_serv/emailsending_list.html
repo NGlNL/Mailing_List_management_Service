@@ -1,0 +1,37 @@
+{% extends 'mail_serv/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Попытки рассылок</h1>
+            <p><strong>Успешные попытки:</strong> {{ successful_attempts_count }}</p>
+            <p><strong>Не успешные попытки:</strong> {{ unsuccessful_attempts_count }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Успешные попытки</h2>
+            {% for emailsendingattempt in successful_emailsendingattempts %}
+                <div class="alert {{ emailsendingattempt.status }}">
+                    <strong>Статус:</strong> {{ emailsendingattempt.get_status_display }}<br>
+                    <strong>Ответ сервера:</strong> {{ emailsendingattempt.server_response }}<br>
+                    <strong>Рассылка:</strong> {{ emailsendingattempt.mailing.message.subject }} (ID: {{ emailsendingattempt.mailing.id }})
+                    <strong>Время рассылки:</strong> {{ emailsendingattempt.datetime }}<br>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <h2>Не успешные попытки</h2>
+            {% for emailsendingattempt in unsuccessful_emailsendingattempts %}
+                <div class="alert {{ emailsendingattempt.status }}">
+                    <strong>Статус:</strong> {{ emailsendingattempt.get_status_display }}<br>
+                    <strong>Ответ сервера:</strong> {{ emailsendingattempt.server_response }}<br>
+                    <strong>Рассылка:</strong> {{ emailsendingattempt.mailing.message.subject }} (ID: {{ emailsendingattempt.mailing.id }})
+                    <strong>Время рассылки:</strong> {{ emailsendingattempt.datetime }}<br>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

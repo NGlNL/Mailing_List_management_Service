@@ -1,0 +1,149 @@
+{% extends "mail_serv/base.html" %}
+
+{% block content %}
+<body>
+{% if user.is_authenticated %}
+  <div class="container-mt">
+    <main>
+      <div class="row-cols-lg-2">
+        <div class="col-lg-3 order-md-last position-fixed" style="margin:20px">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Получатели</span>
+            <a href="{% url 'mail_serv:rec_create' %}" class="btn btn-primary btn-sm rounded-pill" style="margin-right:175px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 1 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                </svg>
+                Добавить
+            </a>
+            <span class="badge bg-primary rounded-pill">{{ total_recipients }}</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div style="overflow: auto; max-height: 350px">
+                <ul>
+                  {% for recipient in recipients %}
+                    <li  style="margin-bottom:10px">
+                      <strong>{{recipient.id}}. </strong><a href="{% url 'mail_serv:rec_detail' recipient.id %}" class="link-underline-secondary">{{ recipient.initials }}</a> - {{ recipient.email }}
+                      <a href="{% url 'mail_serv:rec_delete' recipient.id %}" class="btn btn-danger btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                          <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                          <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                        </svg>
+                      </a>
+                      <a href="{% url 'mail_serv:rec_update' recipient.id %}" class="btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                        </svg>
+                      </a>
+                    </li>
+                  {% empty %}
+                    <li>Нет получателей</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-3 order-md-last position-fixed" style="margin-left:550px; margin-top:20px">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Сообщения</span>
+            <a href="{% url 'mail_serv:management_create' %}" class="btn btn-primary btn-sm rounded-pill" style="margin-right:170px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-plus" viewBox="0 0 16 16">
+                  <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2zm3.708 6.208L1 11.105V5.383zM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2z"/>
+                  <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5"/>
+                </svg>
+                Добавить
+            </a>
+            <span class="badge bg-primary rounded-pill">{{ total_messages }}</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div style="overflow: auto; max-height: 500px">
+                <ul>
+                  {% for messagemanagement in messagemanagements %}
+                    <li style="margin-bottom:10px">
+                      <strong>{{messagemanagement.id}}. </strong><a href="{% url 'mail_serv:management_detail' messagemanagement.id %}" class="link-underline-secondary">{{ messagemanagement.subject }}</a>
+                      <a href="{% url 'mail_serv:management_delete' messagemanagement.id %}" class="btn btn-danger btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                          <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                          <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                        </svg>
+                      </a>
+                      <a href="{% url 'mail_serv:management_update' messagemanagement.id %}" class="btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                        </svg>
+                      </a>
+                    </li>
+                  {% empty %}
+                    <li>Нет сообщений</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-3 order-md-last position-fixed" style="margin-left:1200px; margin-top:20px">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Рассылки</span>
+            <a href="{% url 'mail_serv:mail_create' %}" class="btn btn-primary btn-sm rounded-pill" style="margin-right:20px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-plus-fill" viewBox="0 0 16 16">
+                  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 4.697v4.974A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-1.965.45l-.338-.207z"/>
+                  <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5"/>
+                </svg>
+                Добавить
+            </a>
+            <a href="{% url 'mail_serv:emailsenading_list' %}" type="button" class="btn btn-secondary" style="margin-right: 30px">
+                Анализ попыток
+            </a>
+            <span class="badge bg-primary rounded-pill">{{ total_mailings }}</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div style="overflow: auto; max-height: 500px">
+                <ul>
+                  {% for mailing in mailings %}
+                    <li style="margin-bottom:10px">
+                      <strong>{{mailing.id}}. </strong><a href="{% url 'mail_serv:mail_detail' mailing.id %}" class="link-underline-secondary">{{ mailing.message }} - Статус: {{ mailing.status }}</a>
+                      <a href="{% url 'mail_serv:mail_delete' mailing.id %}" class="btn btn-danger btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-dash-fill" viewBox="0 0 16 16">
+                          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 4.697v4.974A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-1.965.45l-.338-.207z"/>
+                          <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-5.5 0a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5"/>
+                        </svg>
+                      </a>
+                      <a href="{% url 'mail_serv:mail_update' mailing.id %}" class="btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-paper-fill" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M6.5 9.5 3 7.5v-6A1.5 1.5 0 0 1 4.5 0h7A1.5 1.5 0 0 1 13 1.5v6l-3.5 2L8 8.75zM1.059 3.635 2 3.133v3.753L0 5.713V5.4a2 2 0 0 1 1.059-1.765M16 5.713l-2 1.173V3.133l.941.502A2 2 0 0 1 16 5.4zm0 1.16-5.693 3.337L16 13.372v-6.5Zm-8 3.199 7.941 4.412A2 2 0 0 1 14 16H2a2 2 0 0 1-1.941-1.516zm-8 3.3 5.693-3.162L0 6.873v6.5Z"/>
+                        </svg>
+                      </a>
+                      <form action="{% url 'mail_serv:send_message' mailing.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Запустить</button>
+                      </form>
+                      {% if 'mail_serv.can_disable_mailing' in perms %}
+                        <form action="{% url 'mail_serv:disabling_mailing' mailing.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Отменить</button>
+                        </form>
+                      {% endif %}
+                    </li>
+                  {% empty %}
+                    <li>Нет рассылок</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+{% else %}
+  <div class="alert alert-danger" role="alert">
+    Пожалуйста, войдите в систему, чтобы продолжить.
+  </div>
+  <a href="{% url 'users:login' %}" class="btn btn-primary">Войти</a>
+{% endif %}
+</body>
+{% endblock %}
